@@ -1,4 +1,7 @@
+package data;
+
 import java.util.ArrayList;
+
 
 /**
  * Класс задач-эпиков
@@ -19,7 +22,6 @@ public class Epic extends Task{
         numOfSubtasks.add(indOfSubtask);
     }
 
-    /** Метод получения списка подзадач задачи-эпик */
     public ArrayList<Integer> getNumOfSubtasks() {
         return numOfSubtasks;
     }
