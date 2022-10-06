@@ -1,3 +1,5 @@
+package data;
+
 /**
  * Класс подзадач
  * @author Max Vasilyev
