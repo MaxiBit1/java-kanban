@@ -26,13 +26,13 @@ public class Epic extends Task{
         return numOfSubtasks;
     }
 
-    /** Переопределение метода toString() */
     @Override
     public String toString() {
         return "Epic {" +
                 "title='" + super.getTitle() + '\'' +
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getStatus() + '\'' +
+                ", id= " + super.getId() + '\'' +
                 '}';
     }
 }

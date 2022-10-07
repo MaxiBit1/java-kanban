@@ -1,5 +1,5 @@
 import data.*;
-import bisnesLogic.Manager;
+import manager.Manager;
 
 /**
  * Главный класс планера
@@ -21,14 +21,14 @@ public class Main {
         task2.setTitle("Купить книгу");
         task2.setDescription("Нужно купить книгу Хеммингуэя");
         task2.setNumOfStatus(2);
-        manager.createTasks(task1, manager.getStorageTask());
-        manager.createTasks(task2, manager.getStorageTask());
-        System.out.println(manager.getALLTasks());
+        manager.createTasks(task1);
+        manager.createTasks(task2);
+        System.out.println(manager.getStorageTask());
         task2.setNumOfStatus(3);
-        manager.setUpdateTask(task2, manager.getStorageTask());
-        System.out.println(manager.getALLTasks());
-        manager.deletePerIndification(1);
-        System.out.println(manager.getALLTasks());
+        manager.setUpdateTask(task2);
+        System.out.println(manager.getStorageTask());
+        manager.deletePerIndificationTask(1);
+        System.out.println(manager.getStorageTask());
         SubTask subTask1 = new SubTask();
         subTask1.setTitle("Собрать чемодан");
         subTask1.setDescription("Нужно собрать чемодан");
@@ -41,38 +41,44 @@ public class Main {
         subTask3.setTitle("Помыть пол");
         subTask3.setDescription("Необходимо помыть пол");
         subTask3.setNumOfStatus(1);
-        manager.createTasks(subTask1, manager.getStorageSubtask());
-        manager.createTasks(subTask3, manager.getStorageSubtask());
-        manager.createTasks(subTask2, manager.getStorageSubtask());
-        System.out.println(manager.getALLTasks());
+        manager.createSubtacks(subTask1);
+        manager.createSubtacks(subTask3);
+        manager.createSubtacks(subTask2);
+        System.out.println(manager.getStorageSubtask());
         Epic epic1 = new Epic();
         epic1.setTitle("Путешествие");
         epic1.setDescription("Нужно собраться в путешествие");
         epic1.addNumOfSubtask(3);
         epic1.addNumOfSubtask(5);
+        subTask1.setIdEpic(6);
+        subTask2.setIdEpic(6);
         manager.setEpicStatus(epic1);
-        manager.createTasks(epic1, manager.getStorageEpic());
+        manager.createEpic(epic1);
         Epic epic2 = new Epic();
         epic2.setTitle("Уборка в доме");
         epic2.setDescription("Необходимо убраться дома");
         epic2.addNumOfSubtask(4);
+        subTask3.setIdEpic(7);
         manager.setEpicStatus(epic2);
-        manager.createTasks(epic2, manager.getStorageEpic());
-        System.out.println(manager.getALLTasks());
+        manager.createEpic(epic2);
+        System.out.println(manager.getStorageEpic());
         System.out.println(manager.getAllSubtasks(epic1));
+        System.out.println(manager.getAllSubtasks(epic2));
         subTask3.setNumOfStatus(3);
-        manager.setUpdateTask(subTask3, manager.getStorageSubtask());
+        manager.setUpdateSubtask(subTask3);
         manager.setEpicStatus(epic2);
-        System.out.println(manager.getALLTasks());
+        System.out.println(manager.getStorageSubtask());
+        System.out.println(manager.getStorageEpic());
 
         Epic epic3 = new Epic();
         epic3.setTitle("Путешествие1");
         epic3.setDescription("Нужно собраться в путешествие111");
         manager.setEpicStatus(epic3);
-        manager.createTasks(epic3, manager.getStorageEpic());
-        System.out.println(manager.getALLTasks());
+        manager.createEpic(epic3);
+        System.out.println(manager.getStorageEpic());
         manager.deleteAllTasks();
-        System.out.println(manager.getALLTasks());
+        System.out.println(manager.getStorageTask());
+        System.out.println(manager.getByIndificatorEpic(6));
 
     }
 }
