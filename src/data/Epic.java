@@ -22,6 +22,20 @@ public class Epic extends Task{
         numOfSubtasks.add(indOfSubtask);
     }
 
+    /** Метод удаление из листа определенный номер подзадачи
+      * @param indificator - индификатор
+     */
+    public void removeNumOfSubtask(int indificator){
+        numOfSubtasks.remove(indificator);
+    }
+
+    /**
+     * Метод удаления всего листа
+     */
+    public void deleteAllList(){
+        numOfSubtasks.clear();
+    }
+
     public ArrayList<Integer> getNumOfSubtasks() {
         return numOfSubtasks;
     }
@@ -33,6 +47,7 @@ public class Epic extends Task{
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getStatus() + '\'' +
                 ", id= " + super.getId() + '\'' +
+                ", idSubtask= " + numOfSubtasks.toString() + '\'' +
                 '}';
     }
 }

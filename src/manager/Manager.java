@@ -8,6 +8,7 @@ import data.*;
 
 /**
  * Класс реализующий бизнес-логику
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
@@ -19,32 +20,19 @@ public class Manager {
     private int indificator = 0;
 
     public ArrayList<Task> getStorageTask() {
-        ArrayList<Task> listOfTasks = new ArrayList<>();
-        for (Task task : storageTask.values()) {
-            listOfTasks.add(task);
-        }
-        return listOfTasks;
+        return new ArrayList<>(storageTask.values());
     }
 
     public ArrayList<Task> getStorageEpic() {
-        ArrayList<Task> listOfTasks = new ArrayList<>();
-        for (Task task : storageEpic.values()) {
-            listOfTasks.add(task);
-        }
-        return listOfTasks;
+        return new ArrayList<>(storageEpic.values());
     }
 
     public ArrayList<Task> getStorageSubtask() {
-        ArrayList<Task> listOfTasks = new ArrayList<>();
-        for (Task task : storageSubtask.values()) {
-            listOfTasks.add(task);
-        }
-        return listOfTasks;
+        return new ArrayList<>(storageSubtask.values());
     }
 
     /**
      * Метод для создание задачи и сохранение его хэш-таблице
-     *
      * @param task - задача
      */
     public void createTasks(Task task) {
@@ -54,7 +42,6 @@ public class Manager {
 
     /**
      * Метод для создание задачи и сохранение его хэш-таблице
-     *
      * @param epic - задача-эпик
      */
     public void createEpic(Epic epic) {
@@ -64,7 +51,6 @@ public class Manager {
 
     /**
      * Метод для создание задачи и сохранение его хэш-таблице
-     *
      * @param subTask - подзадача
      */
     public void createSubtacks(SubTask subTask) {
@@ -74,7 +60,6 @@ public class Manager {
 
     /**
      * Метод выводящий данные о задачах-эпиках и об их подзадачах
-     *
      * @param epic - задача-эпик
      * @return возвращает список этой задачи-эпик
      */
@@ -110,22 +95,17 @@ public class Manager {
     public void deleteAllSubtasks() {
         System.out.println("Все задачи стерты");
         storageSubtask.clear();
+        for (int id : storageEpic.keySet()) {
+            storageEpic.get(id).deleteAllList();
+        }
     }
 
     /**
      * Метод удаление задачи по индификатору
-     *
      * @param indification - индификатор
      */
     public void deletePerIndificationTask(int indification) {
-        for (Object ind : storageTask.keySet()) {
-            if (indification == (Integer) ind) {
-                storageTask.remove(ind);
-                break;
-            } else {
-                System.out.println("Такого индификатора нет");
-            }
-        }
+        storageTask.remove(indification);
     }
 
     /**
@@ -133,35 +113,26 @@ public class Manager {
      * @param indification - индификатор
      */
     public void deletePerIndificationEpic(int indification) {
-        for (Object ind : storageEpic.keySet()) {
-            if (indification == (Integer) ind) {
-                storageEpic.remove(ind);
-                break;
-            } else {
-                System.out.println("Такого индификатора нет");
-            }
+        for (int i : storageEpic.get(indification).getNumOfSubtasks()) {
+            storageSubtask.get(i).setIdEpicNull();
         }
+        storageEpic.remove(indification);
     }
 
     /**
      * Метод удаление подзадачи по индификатору
-     *
      * @param indification - индификатор
      */
     public void deletePerIndificationSubtask(int indification) {
-        for (Object ind : storageSubtask.keySet()) {
-            if (indification == (Integer) ind) {
-                storageSubtask.remove(ind);
-                break;
-            } else {
-                System.out.println("Такого индификатора нет");
-            }
-        }
+        Epic epic = storageEpic.get(storageSubtask.get(indification).getIdEpic());
+        int ind = epic.getNumOfSubtasks().indexOf(indification);
+        epic.removeNumOfSubtask(ind);
+        storageSubtask.remove(indification);
+
     }
 
     /**
      * Метод установление статуса для задачей-эпиков
-     *
      * @param epic - задача типа эпик
      */
     public void setEpicStatus(Epic epic) {
@@ -182,7 +153,6 @@ public class Manager {
 
     /**
      * Метод для обновления данных в хэш-таблицах задач
-     *
      * @param task - задача
      */
     public void setUpdateTask(Task task) {
@@ -192,7 +162,6 @@ public class Manager {
 
     /**
      * Метод для обновления данных в хэш-таблицах задач-эпиков
-     *
      * @param epic - задача-эпик
      */
     public void setUpdateEpic(Epic epic) {
@@ -202,11 +171,13 @@ public class Manager {
 
     /**
      * Метод для обновления данных в хэш-таблицах подзадач
-     *
-     * @param - задача-эпик
+     * @param subTask - подзадача
      */
     public void setUpdateSubtask(SubTask subTask) {
         storageSubtask.put(subTask.getId(), subTask);
+        Epic epic = storageEpic.get(storageSubtask.get(subTask.getId()).getIdEpic());
+        int ind = epic.getNumOfSubtasks().indexOf(subTask.getId());
+        storageEpic.get(subTask.getIdEpic()).getNumOfSubtasks().set(ind, subTask.getId());
         System.out.println("Обновление произошло");
     }
 
@@ -225,7 +196,6 @@ public class Manager {
 
     /**
      * Метод проверки статуса для метода получения статуса для задач-эпиков
-     *
      * @param task - задача
      * @return возвращает результат проверки
      */
@@ -235,7 +205,6 @@ public class Manager {
 
     /**
      * Метод проверки статуса "NEW" во всех подзадачах в задачах-эпиков
-     *
      * @param listOfSubtask - список всех индификаторов подзадач в определенной задаче-эпике
      * @return возвращает результат проверки
      */
@@ -254,7 +223,6 @@ public class Manager {
 
     /**
      * Метод проверки значения статуса во всех подзадачах в задах-эпиках
-     *
      * @param arrayBoolean - список всех проверок статусов подзадач в определенной задаче-эпике
      * @return возвращает результат проверки
      */

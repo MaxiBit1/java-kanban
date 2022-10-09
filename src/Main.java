@@ -75,10 +75,16 @@ public class Main {
         epic3.setDescription("Нужно собраться в путешествие111");
         manager.setEpicStatus(epic3);
         manager.createEpic(epic3);
+        manager.deletePerIndificationSubtask(3);
         System.out.println(manager.getStorageEpic());
+        System.out.println(manager.getStorageSubtask());
+        manager.deletePerIndificationEpic(7);
+        System.out.println(manager.getStorageEpic());
+        System.out.println(manager.getStorageSubtask());
         manager.deleteAllTasks();
         System.out.println(manager.getStorageTask());
         System.out.println(manager.getByIndificatorEpic(6));
-
+        manager.deleteAllSubtasks();
+        System.out.println(manager.getStorageEpic());
     }
 }

@@ -16,7 +16,13 @@ public class SubTask extends Task {
     public void setIdEpic(int idEpic) {
         this.idEpic = idEpic;
     }
-    
+
+    /**
+     * Метод установки id задачи-эпик в ноль
+     */
+    public void setIdEpicNull(){
+        idEpic = 0;
+    }
     @Override
     public String toString() {
         return "Subtask {" +
