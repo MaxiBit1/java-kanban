@@ -2,24 +2,21 @@ package manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 
 import data.*;
 
 /**
- * Класс реализующий бизнес-логику
- *
+ * Класс реализующий логику менеджера
  * @author Max Vasilyev
  * @version 1.0
  */
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
 
     private HashMap<Integer, Task> storageTask = new HashMap<>();
     private HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
     private int indificator = 0;
-    private List<Task> historyList = new ArrayList<>();
 
     @Override
     public ArrayList<Task> getStorageTask() {
@@ -203,28 +200,20 @@ public class InMemoryTaskManager implements TaskManager{
 
     @Override
     public Task getTask(int id) {
-        historyList.add(storageTask.get(id));
+        Managers.HistoryManagergetDefaultHistory().add(storageTask.get(id));
         return storageTask.get(id);
     }
 
     @Override
     public Task getEpic(int id) {
-        historyList.add(storageEpic.get(id));
+        Managers.HistoryManagergetDefaultHistory().add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
     @Override
     public Task getSubtask(int id) {
-        historyList.add(storageSubtask.get(id));
+        Managers.HistoryManagergetDefaultHistory().add(storageSubtask.get(id));
         return storageSubtask.get(id);
-    }
-
-    @Override
-    public List<Task> getHistory() {
-        if(historyList.size() > 10) {
-            historyList.remove(0);
-        }
-        return historyList;
     }
 
     /**
