@@ -65,7 +65,17 @@ public class Main {
         Managers.getDefault().getSubtask(3);
         Managers.getDefault().getEpic(6);
         System.out.println(Managers.HistoryManagergetDefaultHistory().getHistory());
+        Managers.getDefault().getSubtask(4);
+        System.out.println(Managers.HistoryManagergetDefaultHistory().getHistory());
+        Managers.getDefault().getTask(1);
         Managers.getDefault().getSubtask(3);
+        Managers.getDefault().getEpic(6);
+        Managers.getDefault().getTask(1);
+        Managers.getDefault().getSubtask(3);
+        Managers.getDefault().getEpic(6);
+        Managers.getDefault().getTask(1);
+        Managers.getDefault().getSubtask(3);
+        Managers.getDefault().getEpic(6);
         System.out.println(Managers.HistoryManagergetDefaultHistory().getHistory());
     }
 }
