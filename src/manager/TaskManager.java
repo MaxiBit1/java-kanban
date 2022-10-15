@@ -5,8 +5,12 @@ import data.SubTask;
 import data.Task;
 
 import java.util.ArrayList;
-import java.util.List;
 
+/**
+ * Интерфейс для классов, реализующих логику менеджера
+ * @author Max Vasilyev
+ * @version 1.0
+ */
 public interface TaskManager {
     ArrayList<Task> getStorageTask();
     ArrayList<Task> getStorageEpic();
@@ -28,6 +32,4 @@ public interface TaskManager {
     Task getTask(int id);
     Task getEpic(int id);
     Task getSubtask(int id);
-    List<Task> getHistory();
-
 }
