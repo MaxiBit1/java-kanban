@@ -2,6 +2,7 @@ package manager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import data.*;
@@ -12,21 +13,25 @@ import data.*;
  * @author Max Vasilyev
  * @version 1.0
  */
-public class Manager {
+public class InMemoryTaskManager implements TaskManager{
 
     private HashMap<Integer, Task> storageTask = new HashMap<>();
     private HashMap<Integer, Epic> storageEpic = new HashMap<>();
     private HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
     private int indificator = 0;
+    private List<Task> historyList = new ArrayList<>();
 
+    @Override
     public ArrayList<Task> getStorageTask() {
         return new ArrayList<>(storageTask.values());
     }
 
+    @Override
     public ArrayList<Task> getStorageEpic() {
         return new ArrayList<>(storageEpic.values());
     }
 
+    @Override
     public ArrayList<Task> getStorageSubtask() {
         return new ArrayList<>(storageSubtask.values());
     }
@@ -35,6 +40,7 @@ public class Manager {
      * Метод для создание задачи и сохранение его хэш-таблице
      * @param task - задача
      */
+    @Override
     public void createTasks(Task task) {
         task.setId(++indificator);
         storageTask.put(indificator, task);
@@ -44,6 +50,7 @@ public class Manager {
      * Метод для создание задачи и сохранение его хэш-таблице
      * @param epic - задача-эпик
      */
+    @Override
     public void createEpic(Epic epic) {
         epic.setId(++indificator);
         storageEpic.put(indificator, epic);
@@ -53,6 +60,7 @@ public class Manager {
      * Метод для создание задачи и сохранение его хэш-таблице
      * @param subTask - подзадача
      */
+    @Override
     public void createSubtacks(SubTask subTask) {
         subTask.setId(++indificator);
         storageSubtask.put(indificator, subTask);
@@ -63,6 +71,7 @@ public class Manager {
      * @param epic - задача-эпик
      * @return возвращает список этой задачи-эпик
      */
+    @Override
     public ArrayList<SubTask> getAllSubtasks(Epic epic) {
         ArrayList<SubTask> listOfSubtaskTitle = new ArrayList<>();
         for (int i = 0; i < epic.getNumOfSubtasks().size(); i++) {
@@ -76,6 +85,7 @@ public class Manager {
     /**
      * Метод удаления всех задач из хэш-таблицы
      */
+    @Override
     public void deleteAllTasks() {
         System.out.println("Все задачи стерты");
         storageTask.clear();
@@ -84,6 +94,7 @@ public class Manager {
     /**
      * Метод удаления всех задач-эпиков из хэш-таблицы
      */
+    @Override
     public void deleteAllEpics() {
         System.out.println("Все задачи стерты");
         storageEpic.clear();
@@ -92,6 +103,7 @@ public class Manager {
     /**
      * Метод удаления всех подзадач из хэш-таблицы
      */
+    @Override
     public void deleteAllSubtasks() {
         System.out.println("Все задачи стерты");
         storageSubtask.clear();
@@ -104,6 +116,7 @@ public class Manager {
      * Метод удаление задачи по индификатору
      * @param indification - индификатор
      */
+    @Override
     public void deletePerIndificationTask(int indification) {
         storageTask.remove(indification);
     }
@@ -112,6 +125,7 @@ public class Manager {
      * Метод удаление задачи-эпик по индификатору
      * @param indification - индификатор
      */
+    @Override
     public void deletePerIndificationEpic(int indification) {
         for (int i : storageEpic.get(indification).getNumOfSubtasks()) {
             storageSubtask.get(i).setIdEpicNull();
@@ -123,6 +137,7 @@ public class Manager {
      * Метод удаление подзадачи по индификатору
      * @param indification - индификатор
      */
+    @Override
     public void deletePerIndificationSubtask(int indification) {
         Epic epic = storageEpic.get(storageSubtask.get(indification).getIdEpic());
         int ind = epic.getNumOfSubtasks().indexOf(indification);
@@ -135,6 +150,7 @@ public class Manager {
      * Метод установление статуса для задачей-эпиков
      * @param epic - задача типа эпик
      */
+    @Override
     public void setEpicStatus(Epic epic) {
         if (epic.getNumOfSubtasks().isEmpty() || checkNewStatus(epic.getNumOfSubtasks())) {
             epic.setNumOfStatus(1);
@@ -155,6 +171,7 @@ public class Manager {
      * Метод для обновления данных в хэш-таблицах задач
      * @param task - задача
      */
+    @Override
     public void setUpdateTask(Task task) {
         storageTask.put(task.getId(), task);
         System.out.println("Обновление произошло");
@@ -164,6 +181,7 @@ public class Manager {
      * Метод для обновления данных в хэш-таблицах задач-эпиков
      * @param epic - задача-эпик
      */
+    @Override
     public void setUpdateEpic(Epic epic) {
         storageEpic.put(epic.getId(), epic);
         System.out.println("Обновление произошло");
@@ -173,6 +191,7 @@ public class Manager {
      * Метод для обновления данных в хэш-таблицах подзадач
      * @param subTask - подзадача
      */
+    @Override
     public void setUpdateSubtask(SubTask subTask) {
         storageSubtask.put(subTask.getId(), subTask);
         Epic epic = storageEpic.get(storageSubtask.get(subTask.getId()).getIdEpic());
@@ -182,16 +201,30 @@ public class Manager {
     }
 
 
-    public Task getByIndificatorTask(int id) {
+    @Override
+    public Task getTask(int id) {
+        historyList.add(storageTask.get(id));
         return storageTask.get(id);
     }
 
-    public Task getByIndificatorEpic(int id) {
+    @Override
+    public Task getEpic(int id) {
+        historyList.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
-    public Task getByIndificatorSubtask(int id) {
+    @Override
+    public Task getSubtask(int id) {
+        historyList.add(storageSubtask.get(id));
         return storageSubtask.get(id);
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        if(historyList.size() > 10) {
+            historyList.remove(0);
+        }
+        return historyList;
     }
 
     /**
@@ -200,7 +233,7 @@ public class Manager {
      * @return возвращает результат проверки
      */
     private boolean checkStatus(Task task) {
-        return Objects.equals(task.getStatus(), "DONE");
+        return Objects.equals(task.getStatus(), StatusTasks.DONE.toString());
     }
 
     /**
@@ -211,7 +244,7 @@ public class Manager {
     private boolean checkNewStatus(ArrayList<Integer> listOfSubtask) {
         int countOfNewStatus = 0;
         for (int i : listOfSubtask) {
-            if (storageSubtask.get(i).getStatus().equals("NEW")) {
+            if (storageSubtask.get(i).getStatus().equals(StatusTasks.NEW.toString())) {
                 countOfNewStatus++;
             }
         }

@@ -1,7 +1,5 @@
 package data;
 
-import java.util.Objects;
-
 /**
  * Класс простой задачи
  *
@@ -49,13 +47,13 @@ public class Task {
     private void setStatus(int numOfStatus) {
         switch (numOfStatus) {
             case 1:
-                status = "NEW";
+                status = StatusTasks.NEW.toString();
                 break;
             case 2:
-                status = "IN_PROGRESS";
+                status = StatusTasks.IN_PROGRESS.toString();
                 break;
             case 3:
-                status = "DONE";
+                status = StatusTasks.DONE.toString();
                 break;
         }
     }
