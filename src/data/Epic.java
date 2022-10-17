@@ -10,34 +10,35 @@ import java.util.ArrayList;
  */
 public class Epic extends Task{
 
-    private ArrayList<Integer> numOfSubtasks;
-    public Epic() {
-        numOfSubtasks = new ArrayList<>();
+    private ArrayList<Integer> SubtackIDs;
+    public Epic(String title, String description) {
+        super(title, description);
+        SubtackIDs = new ArrayList<>();
     }
 
     /** Метод заполенния листа подзадач
      * @param indOfSubtask - индификатор подзадачи
      */
     public void addNumOfSubtask(int indOfSubtask){
-        numOfSubtasks.add(indOfSubtask);
+        SubtackIDs.add(indOfSubtask);
     }
 
     /** Метод удаление из листа определенный номер подзадачи
       * @param indificator - индификатор
      */
     public void removeNumOfSubtask(int indificator){
-        numOfSubtasks.remove(indificator);
+        SubtackIDs.remove(indificator);
     }
 
     /**
      * Метод удаления всего листа
      */
     public void deleteAllList(){
-        numOfSubtasks.clear();
+        SubtackIDs.clear();
     }
 
-    public ArrayList<Integer> getNumOfSubtasks() {
-        return numOfSubtasks;
+    public ArrayList<Integer> getSubtackIDs() {
+        return SubtackIDs;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class Epic extends Task{
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getStatus() + '\'' +
                 ", id= " + super.getId() + '\'' +
-                ", idSubtask= " + numOfSubtasks.toString() + '\'' +
+                ", idSubtask= " + SubtackIDs.toString() + '\'' +
                 '}';
     }
 }
