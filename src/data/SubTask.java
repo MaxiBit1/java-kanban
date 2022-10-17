@@ -7,21 +7,25 @@ package data;
  */
 public class SubTask extends Task {
 
-    private int idEpic;
+    private int EpicId;
 
-    public int getIdEpic() {
-        return idEpic;
+    public SubTask(String title, String description) {
+        super(title, description);
     }
 
-    public void setIdEpic(int idEpic) {
-        this.idEpic = idEpic;
+    public int getEpicId() {
+        return EpicId;
+    }
+
+    public void setEpicId(int epicId) {
+        this.EpicId = epicId;
     }
 
     /**
      * Метод установки id задачи-эпик в ноль
      */
     public void setIdEpicNull(){
-        idEpic = 0;
+        EpicId = 0;
     }
     @Override
     public String toString() {
@@ -30,7 +34,7 @@ public class SubTask extends Task {
                 ", description='" + super.getDescription() + '\'' +
                 ", status='" + super.getStatus() + '\'' +
                 ", id= " + super.getId() + '\'' +
-                ", idEpic= " + idEpic + '\'' +
+                ", idEpic= " + EpicId + '\'' +
                 '}';
     }
 
