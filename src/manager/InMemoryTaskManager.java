@@ -231,7 +231,7 @@ public class InMemoryTaskManager implements TaskManager {
      * @return возвращает результат проверки
      */
     private boolean checkStatus(Task task) {
-        return Objects.equals(task.getStatus(), StatusTasks.DONE.toString());
+        return Objects.equals(task.getStatus(), StatusTasks.DONE);
     }
 
     /**
@@ -242,7 +242,7 @@ public class InMemoryTaskManager implements TaskManager {
     private boolean checkNewStatus(ArrayList<Integer> listOfSubtask) {
         int countOfNewStatus = 0;
         for (int i : listOfSubtask) {
-            if (storageSubtask.get(i).getStatus().equals(StatusTasks.NEW.toString())) {
+            if (storageSubtask.get(i).getStatus() == StatusTasks.NEW) {
                 countOfNewStatus++;
             }
         }
