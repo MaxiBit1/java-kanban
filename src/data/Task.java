@@ -1,8 +1,9 @@
 package data;
 
+import java.util.Objects;
+
 /**
  * Класс простой задачи
- *
  * @author Max Vasilyev
  * @version 1.0
  */
@@ -10,8 +11,13 @@ package data;
 public class Task {
     private String title;
     private String description;
-    private String status;
+    private StatusTasks status;
     private int id;
+
+    public Task (String title, String description) {
+        this.title = title;
+        this.description = description;
+    }
 
     public int getId() {
         return id;
@@ -25,47 +31,31 @@ public class Task {
         return title;
     }
 
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-
     public String getDescription() {
         return description;
     }
 
-    /**
-     * Метод установки статуса задачи
-     * @param numOfStatus - номер статуса
-     */
-    private void setStatus(int numOfStatus) {
-        switch (numOfStatus) {
-            case 1:
-                status = StatusTasks.NEW.toString();
-                break;
-            case 2:
-                status = StatusTasks.IN_PROGRESS.toString();
-                break;
-            case 3:
-                status = StatusTasks.DONE.toString();
-                break;
-        }
+    public void setStatus(StatusTasks status) {
+        this.status = status;
     }
 
-
-    public String getStatus() {
+    public StatusTasks getStatus() {
         return status;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Task task = (Task) o;
+        return id == task.id && Objects.equals(title, task.title)
+                && Objects.equals(description, task.description)
+                && status == task.status;
+    }
 
-    public void setNumOfStatus(int numOfStatus) {
-        setStatus(numOfStatus);
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, description, status, id);
     }
 
     @Override
