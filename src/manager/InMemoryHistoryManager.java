@@ -13,7 +13,7 @@ import java.util.List;
 public class InMemoryHistoryManager implements HistoryManager{
 
     private List<Task> historyList = new ArrayList<>();
-    private final int LIMIT_SIZE_ARRAY = 10;
+    private final int LIMIT_SIZE_HISTORY = 10;
 
     /**
      * Метод добавления в историю список задач задачу
@@ -26,7 +26,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public List<Task> getHistory() {
-        if(historyList.size() <= LIMIT_SIZE_ARRAY){
+        if(historyList.size() <= LIMIT_SIZE_HISTORY){
             return historyList;
         }
         return historyList.subList(historyList.size() - 10, historyList.size());

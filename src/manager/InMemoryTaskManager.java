@@ -22,6 +22,8 @@ public class InMemoryTaskManager implements TaskManager {
     private HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
     private int indificator = 0;
 
+    HistoryManager historyManager = Managers.HistoryManagergetDefaultHistory();
+
     @Override
     public List<Task> getStorageTask() {
         return new ArrayList<>(storageTask.values());
@@ -204,25 +206,26 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
-        Managers.HistoryManagergetDefaultHistory().add(storageTask.get(id));
+        historyManager.add(storageTask.get(id));
+//        Managers.HistoryManagergetDefaultHistory().add(storageTask.get(id));
         return storageTask.get(id);
     }
 
     @Override
     public Task getEpic(int id) {
-        Managers.HistoryManagergetDefaultHistory().add(storageEpic.get(id));
+        historyManager.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
     @Override
     public Task getSubtask(int id) {
-        Managers.HistoryManagergetDefaultHistory().add(storageSubtask.get(id));
+        historyManager.add(storageSubtask.get(id));
         return storageSubtask.get(id);
     }
 
     @Override
     public List<Task> getHistory() {
-        return Managers.HistoryManagergetDefaultHistory().getHistory();
+        return historyManager.getHistory();
     }
 
     /**
