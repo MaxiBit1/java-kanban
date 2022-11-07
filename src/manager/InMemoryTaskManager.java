@@ -86,29 +86,38 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     /**
-     * Метод удаления всех задач из хэш-таблицы
+     * Метод удаления всех задач из хэш-таблицы и хэш-таблицы истории вызова
      */
     @Override
     public void deleteAllTasks() {
         System.out.println("Все задачи стерты");
+        for (Integer idTask : storageTask.keySet()) {
+            historyManager.remove(idTask);
+        }
         storageTask.clear();
     }
 
     /**
-     * Метод удаления всех задач-эпиков из хэш-таблицы
+     * Метод удаления всех задач-эпиков из хэш-таблицы и хэш-таблицы истории вызова
      */
     @Override
     public void deleteAllEpics() {
         System.out.println("Все задачи стерты");
+        for (Integer idTask : storageEpic.keySet()) {
+            historyManager.remove(idTask);
+        }
         storageEpic.clear();
     }
 
     /**
-     * Метод удаления всех подзадач из хэш-таблицы
+     * Метод удаления всех подзадач из хэш-таблицы и хэш-таблицы истории вызова
      */
     @Override
     public void deleteAllSubtasks() {
         System.out.println("Все задачи стерты");
+        for (Integer idTask : storageSubtask.keySet()) {
+            historyManager.remove(idTask);
+        }
         storageSubtask.clear();
         for (int id : storageEpic.keySet()) {
             storageEpic.get(id).deleteAllList();
@@ -122,6 +131,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteTaskById(int indification) {
         storageTask.remove(indification);
+        historyManager.remove(indification);
     }
 
     /**
@@ -134,6 +144,7 @@ public class InMemoryTaskManager implements TaskManager {
             storageSubtask.get(i).setIdEpicNull();
         }
         storageEpic.remove(indification);
+        historyManager.remove(indification);
     }
 
     /**
@@ -146,7 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
         int ind = epic.getSubtackIDs().indexOf(indification);
         epic.removeNumOfSubtask(ind);
         storageSubtask.remove(indification);
-
+        historyManager.remove(indification);
     }
 
     /**
@@ -207,7 +218,6 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTask(int id) {
         historyManager.add(storageTask.get(id));
-//        Managers.HistoryManagergetDefaultHistory().add(storageTask.get(id));
         return storageTask.get(id);
     }
 
