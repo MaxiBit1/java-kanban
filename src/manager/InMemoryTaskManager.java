@@ -150,11 +150,7 @@ public class InMemoryTaskManager implements TaskManager {
         storageEpic.put(epic.getId(), epic);
         System.out.println("Обновление произошло");
     }
-
-    /**
-     * Метод для обновления данных в хэш-таблицах подзадач
-     * @param subTask - подзадача
-     */
+    
     @Override
     public void setUpdateSubtask(SubTask subTask) {
         storageSubtask.put(subTask.getId(), subTask);
