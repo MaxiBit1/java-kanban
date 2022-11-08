@@ -24,11 +24,6 @@ public class InMemoryHistoryManager implements HistoryManager{
      */
     Map<Integer, Node<Task>> nodeMap = new HashMap<>();
 
-
-    /**
-     * Метод добавления в историю список задач задачу
-     * @param task - задача
-     */
     @Override
     public void add(Task task) {
         if(nodeMap.containsKey(task.getId())) {
@@ -43,14 +38,11 @@ public class InMemoryHistoryManager implements HistoryManager{
         return getTasks();
     }
 
-    /**
-     * Метод удаления любой задачи по айди из списка задач и из CustomLinkedList`а
-     * @param id - айди задачи
-     */
     @Override
     public void remove(int id) {
-        removeNode(nodeMap.get(id));
-        nodeMap.remove(id);
+//        removeNode(nodeMap.get(id));
+//        nodeMap.remove(id);
+        removeNode(nodeMap.remove(id));
     }
 
     /**
@@ -77,10 +69,10 @@ public class InMemoryHistoryManager implements HistoryManager{
     private List<Task> getTasks() {
         List<Task> historyList = new ArrayList<>();
         Node<Task> node = head;
-        for (int i = 1; i <= nodeMap.size();i++) {
+        do {
             historyList.add(node.data);
             node = node.next;
-        }
+        } while (node != null);
         return historyList;
     }
 
@@ -109,24 +101,24 @@ public class InMemoryHistoryManager implements HistoryManager{
 
 /**
  * Класс узла
- * @param <T> - обобщенный тип данных
+ * @param <Task> - обобщенный тип данных
  */
-class Node<T> {
+class Node<Task> {
 
     /**
      * пременная данных
      */
-    public T data;
+    public Task data;
     /**
      * переменная ссылки на предыдущие данные
      */
-    public Node<T> prev;
+    public Node<Task> prev;
     /**
      * переменная ссылки на слудующие данные
      */
-    public Node<T> next;
+    public Node<Task> next;
 
-    public Node(T data, Node<T> prev, Node<T> next) {
+    public Node(Task data, Node<Task> prev, Node<Task> next) {
         this.data = data;
         this.prev = prev;
         this.next = next;

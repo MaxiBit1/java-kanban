@@ -39,41 +39,24 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(storageSubtask.values());
     }
 
-    /**
-     * Метод для создание задачи и сохранение его хэш-таблице
-     * @param task - задача
-     */
     @Override
     public void createTasks(Task task) {
         task.setId(++indificator);
         storageTask.put(indificator, task);
     }
 
-    /**
-     * Метод для создание задачи и сохранение его хэш-таблице
-     * @param epic - задача-эпик
-     */
     @Override
     public void createEpic(Epic epic) {
         epic.setId(++indificator);
         storageEpic.put(indificator, epic);
     }
 
-    /**
-     * Метод для создание задачи и сохранение его хэш-таблице
-     * @param subTask - подзадача
-     */
     @Override
     public void createSubtacks(SubTask subTask) {
         subTask.setId(++indificator);
         storageSubtask.put(indificator, subTask);
     }
 
-    /**
-     * Метод выводящий данные о задачах-эпиках и об их подзадачах
-     * @param epic - задача-эпик
-     * @return возвращает список этой задачи-эпик
-     */
     @Override
     public List<SubTask> getAllSubtasks(Epic epic) {
         List<SubTask> listOfSubtaskTitle = new ArrayList<>();
@@ -85,9 +68,6 @@ public class InMemoryTaskManager implements TaskManager {
         return listOfSubtaskTitle;
     }
 
-    /**
-     * Метод удаления всех задач из хэш-таблицы и хэш-таблицы истории вызова
-     */
     @Override
     public void deleteAllTasks() {
         System.out.println("Все задачи стерты");
@@ -97,9 +77,6 @@ public class InMemoryTaskManager implements TaskManager {
         storageTask.clear();
     }
 
-    /**
-     * Метод удаления всех задач-эпиков из хэш-таблицы и хэш-таблицы истории вызова
-     */
     @Override
     public void deleteAllEpics() {
         System.out.println("Все задачи стерты");
@@ -109,9 +86,6 @@ public class InMemoryTaskManager implements TaskManager {
         storageEpic.clear();
     }
 
-    /**
-     * Метод удаления всех подзадач из хэш-таблицы и хэш-таблицы истории вызова
-     */
     @Override
     public void deleteAllSubtasks() {
         System.out.println("Все задачи стерты");
@@ -124,20 +98,12 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    /**
-     * Метод удаление задачи по индификатору
-     * @param indification - индификатор
-     */
     @Override
     public void deleteTaskById(int indification) {
         storageTask.remove(indification);
         historyManager.remove(indification);
     }
 
-    /**
-     * Метод удаление задачи-эпик по индификатору
-     * @param indification - индификатор
-     */
     @Override
     public void deleteEpicById(int indification) {
         for (int i : storageEpic.get(indification).getSubtackIDs()) {
@@ -147,10 +113,6 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.remove(indification);
     }
 
-    /**
-     * Метод удаление подзадачи по индификатору
-     * @param indification - индификатор
-     */
     @Override
     public void deleteSubtaskById(int indification) {
         Epic epic = storageEpic.get(storageSubtask.get(indification).getEpicId());
@@ -160,10 +122,6 @@ public class InMemoryTaskManager implements TaskManager {
         historyManager.remove(indification);
     }
 
-    /**
-     * Метод установление статуса для задачей-эпиков
-     * @param epic - задача типа эпик
-     */
     @Override
     public void setEpicStatus(Epic epic) {
         if (epic.getSubtackIDs().isEmpty() || checkNewStatus(epic.getSubtackIDs())) {
@@ -181,20 +139,12 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    /**
-     * Метод для обновления данных в хэш-таблицах задач
-     * @param task - задача
-     */
     @Override
     public void setUpdateTask(Task task) {
         storageTask.put(task.getId(), task);
         System.out.println("Обновление произошло");
     }
 
-    /**
-     * Метод для обновления данных в хэш-таблицах задач-эпиков
-     * @param epic - задача-эпик
-     */
     @Override
     public void setUpdateEpic(Epic epic) {
         storageEpic.put(epic.getId(), epic);
