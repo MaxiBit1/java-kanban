@@ -60,12 +60,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return "Task {" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                ", id= " + id + '\'' +
-                '}';
+        return String.valueOf(id)+ "," + TypeOfTasks.TASK +"," + title + "," + status + "," + description + "," + " ";
     }
 
 }

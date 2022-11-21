@@ -29,9 +29,6 @@ public class Main {
         SubTask subTask3 = new SubTask("Помыть пол", "Необходимо помыть пол");
         subTask3.setStatus(StatusTasks.NEW);
         Epic epic1 = new Epic("Путешествие", "Нужно собраться в путешествие");
-        epic1.addNumOfSubtask(3);
-        epic1.addNumOfSubtask(5);
-        epic1.addNumOfSubtask(4);
         subTask.setEpicId(6);
         subTask2.setEpicId(6);
         subTask3.setEpicId(6);
@@ -47,20 +44,22 @@ public class Main {
         taskManager.setEpicStatus(epic1);
         taskManager.createEpic(epic2);
         taskManager.setEpicStatus(epic2);
-        taskManager.getTask(1);
-        taskManager.getTask(2);
-        taskManager.getSubtask(5);
-        taskManager.getSubtask(3);
-        taskManager.getSubtask(4);
-        System.out.println(taskManager.getHistory());
-        taskManager.getSubtask(5);
-        System.out.println(taskManager.getHistory());
-        taskManager.getEpic(6);
-        taskManager.getEpic(7);
-        System.out.println(taskManager.getHistory());
-        taskManager.getEpic(6);
-        taskManager.deleteTaskById(2);
-        taskManager.deleteSubtaskById(3);
-        System.out.println(taskManager.getHistory());
+        System.out.println(epic1);
+        System.out.println(epic2);
+//        taskManager.getTask(1);
+//        taskManager.getTask(2);
+//        taskManager.getSubtask(5);
+//        taskManager.getSubtask(3);
+//        taskManager.getSubtask(4);
+//        System.out.println(taskManager.getHistory());
+//        taskManager.getSubtask(5);
+//        System.out.println(taskManager.getHistory());
+//        taskManager.getEpic(6);
+//        taskManager.getEpic(7);
+//        System.out.println(taskManager.getHistory());
+//        taskManager.getEpic(6);
+//        taskManager.deleteTaskById(2);
+//        taskManager.deleteSubtaskById(3);
+//        System.out.println(taskManager.getHistory());
     }
 }

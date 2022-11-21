@@ -17,10 +17,11 @@ import java.util.Objects;
  */
 public class InMemoryTaskManager implements TaskManager {
 
-    private HashMap<Integer, Task> storageTask = new HashMap<>();
-    private HashMap<Integer, Epic> storageEpic = new HashMap<>();
-    private HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
-    private int indificator = 0;
+    protected HashMap<Integer, Task> storageTask = new HashMap<>();
+    protected HashMap<Integer, Epic> storageEpic = new HashMap<>();
+    protected HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
+    protected int indificator = 0;
+    protected int countGet = 0;
 
     HistoryManager historyManager = Managers.HistoryManagergetDefaultHistory();
 
@@ -124,6 +125,11 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setEpicStatus(Epic epic) {
+        for (SubTask subTask: storageSubtask.values()) {
+            if(epic.getId() == subTask.getEpicId()) {
+                epic.getSubtackIDs().add(subTask.getId());
+            }
+        }
         if (epic.getSubtackIDs().isEmpty() || checkNewStatus(epic.getSubtackIDs())) {
             epic.setStatus(StatusTasks.NEW);
         } else {
@@ -163,18 +169,21 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public Task getTask(int id) {
+        countGet++;
         historyManager.add(storageTask.get(id));
         return storageTask.get(id);
     }
 
     @Override
     public Task getEpic(int id) {
+        countGet++;
         historyManager.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
     @Override
     public Task getSubtask(int id) {
+        countGet++;
         historyManager.add(storageSubtask.get(id));
         return storageSubtask.get(id);
     }

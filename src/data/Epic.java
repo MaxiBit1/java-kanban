@@ -16,13 +16,6 @@ public class Epic extends Task{
         subtackIDs = new ArrayList<>();
     }
 
-    /** Метод заполенния листа подзадач
-     * @param indOfSubtask - индификатор подзадачи
-     */
-    public void addNumOfSubtask(int indOfSubtask){
-        subtackIDs.add(indOfSubtask);
-    }
-
     /** Метод удаление из листа определенный номер подзадачи
       * @param indificator - индификатор
      */
@@ -43,12 +36,7 @@ public class Epic extends Task{
 
     @Override
     public String toString() {
-        return "Epic {" +
-                "title='" + super.getTitle() + '\'' +
-                ", description='" + super.getDescription() + '\'' +
-                ", status='" + super.getStatus() + '\'' +
-                ", id= " + super.getId() + '\'' +
-                ", idSubtask= " + subtackIDs.toString() + '\'' +
-                '}';
+        return String.valueOf(super.getId()) + "," + TypeOfTasks.EPIC + "," + super.getTitle() +
+                "," + super.getStatus() + "," + super.getDescription() + "," + " ";
     }
 }
