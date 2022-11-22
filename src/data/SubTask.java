@@ -11,6 +11,7 @@ public class SubTask extends Task {
 
     public SubTask(String title, String description) {
         super(title, description);
+        setTypeOfTask(TypeOfTasks.SUBTASK);
     }
 
     public int getEpicId() {
@@ -29,7 +30,7 @@ public class SubTask extends Task {
     }
     @Override
     public String toString() {
-        return String.valueOf(super.getId()) + "," + TypeOfTasks.SUBTASK + "," + super.getTitle() +
+        return String.valueOf(super.getId()) + "," + super.getTypeOfTask() + "," + super.getTitle() +
                  "," + super.getStatus() + "," + super.getDescription() + "," + epicId;
     }
 

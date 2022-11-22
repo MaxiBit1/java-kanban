@@ -1,13 +1,12 @@
 package manager;
 
-import Exeption.ManagerSaveExeption;
+import exeption.ManagerSaveExeption;
 import data.*;
 
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -16,139 +15,10 @@ import java.util.Objects;
  * @author Max Vasilyev
  * @version 1.0
  */
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private String fileName;
-
-    @Override
-    public void createTasks(Task task) {
-        super.createTasks(task);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void createEpic(Epic epic) {
-        super.createEpic(epic);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void createSubtacks(SubTask subTask) {
-        super.createSubtacks(subTask);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteAllTasks() {
-        super.deleteAllTasks();
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteAllEpics() {
-        super.deleteAllEpics();
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteAllSubtasks() {
-        super.deleteAllSubtasks();
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteTaskById(int indification) {
-        super.deleteTaskById(indification);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteEpicById(int indification) {
-        super.deleteEpicById(indification);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void deleteSubtaskById(int indification) {
-        super.deleteSubtaskById(indification);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void setEpicStatus(Epic epic) {
-        super.setEpicStatus(epic);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void setUpdateTask(Task task) {
-        super.setUpdateTask(task);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void setUpdateEpic(Epic epic) {
-        super.setUpdateEpic(epic);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
-
-    @Override
-    public void setUpdateSubtask(SubTask subTask) {
-        super.setUpdateSubtask(subTask);
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
-        }
-    }
+    private Task task;
 
     /**
      * Конструктор без параметра
@@ -170,9 +40,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 String[] linesArr = str.split("\n");
                 for (int i = 1; i < linesArr.length - 1; i++) {
                     if (linesArr[i].isBlank()) {
-                        getHistoryFromList(getHistoryListNum(linesArr[i + 1]));
+                        getHistoryFromList(CSVTaskForm.getHistoryListNum(linesArr[i + 1]));
                     } else {
-                        toTask(linesArr[i]);
+                       task = CSVTaskForm.toTask(linesArr[i]);
+                       whatCreateTask();
                     }
                 }
             }
@@ -181,21 +52,82 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         }
     }
 
-    /**
-     * Метод записи задач в файл
-     *
-     * @throws ManagerSaveExeption - собственное исключение
-     */
-    private void save() throws ManagerSaveExeption {
-        try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write("id,type,name,status,description,epic");
-            writer.write(allTasksToList());
-            if (countGet != 0) {
-                writer.write("\n" + "\n" + historyToString(historyManager));
-            }
-        } catch (IOException e) {
-            throw new ManagerSaveExeption("Ошибка при записи в файл");
-        }
+    @Override
+    public void createTasks(Task task) {
+        super.createTasks(task);
+        save();
+    }
+
+    @Override
+    public void createEpic(Epic epic) {
+        super.createEpic(epic);
+        save();
+    }
+
+    @Override
+    public void createSubtacks(SubTask subTask) {
+        super.createSubtacks(subTask);
+        save();
+    }
+
+    @Override
+    public void deleteAllTasks() {
+        super.deleteAllTasks();
+        save();
+    }
+
+    @Override
+    public void deleteAllEpics() {
+        super.deleteAllEpics();
+        save();
+    }
+
+    @Override
+    public void deleteAllSubtasks() {
+        super.deleteAllSubtasks();
+        save();
+    }
+
+    @Override
+    public void deleteTaskById(int indification) {
+        super.deleteTaskById(indification);
+        save();
+    }
+
+    @Override
+    public void deleteEpicById(int indification) {
+        super.deleteEpicById(indification);
+        save();
+    }
+
+    @Override
+    public void deleteSubtaskById(int indification) {
+        super.deleteSubtaskById(indification);
+        save();
+    }
+
+    @Override
+    public void setEpicStatus(Epic epic) {
+        super.setEpicStatus(epic);
+        save();
+    }
+
+    @Override
+    public void setUpdateTask(Task task) {
+        super.setUpdateTask(task);
+        save();
+    }
+
+    @Override
+    public void setUpdateEpic(Epic epic) {
+        super.setUpdateEpic(epic);
+        save();
+    }
+
+    @Override
+    public void setUpdateSubtask(SubTask subTask) {
+        super.setUpdateSubtask(subTask);
+        save();
     }
 
     /**
@@ -203,7 +135,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
      *
      * @return - текст, в которой каждая строка задача
      */
-    private String allTasksToList() {
+    public String allTasksToList() {
         StringBuilder sb = new StringBuilder();
         for (int cons = 1; cons <= indificator; cons++) {
             for (Integer indT : storageTask.keySet()) {
@@ -229,75 +161,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     /**
-     * Метод преобразования строки в задачу
-     *
-     * @param value - строка
-     */
-    private void toTask(String value) {
-        String[] cutString = value.split(",");
-        Task task;
-        if (TypeOfTasks.valueOf(cutString[1]) == TypeOfTasks.TASK) {
-            task = new Task(cutString[2], cutString[4]);
-            setTaskAtribuit(task, cutString);
-            createTasks(task);
-        } else if (TypeOfTasks.valueOf(cutString[1]).equals(TypeOfTasks.EPIC)) {
-            task = new Epic(cutString[2], cutString[4]);
-            setTaskAtribuit(task, cutString);
-            createEpic((Epic) task);
-        } else {
-            task = new SubTask(cutString[2], cutString[4]);
-            setTaskAtribuit(task, cutString);
-            setIdEpicSubtask((SubTask) task, cutString[5]);
-            createSubtacks((SubTask) task);
-        }
-    }
-
-    /**
-     * Метод утсановки Id и статуса в задачу
-     *
-     * @param task      - задача
-     * @param cutString - массив из строк
-     */
-    private void setTaskAtribuit(Task task, String[] cutString) {
-        task.setId(Integer.parseInt(cutString[0]));
-        task.setStatus(StatusTasks.valueOf(cutString[3]));
-    }
-
-    /**
-     * Метод преобразования истории просмотра в строку
-     *
-     * @param historyManager - менеджер истории просмотра
-     * @return - строка
-     */
-    private static String historyToString(HistoryManager historyManager) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Task task : historyManager.getHistory()) {
-            stringBuilder.append(task.getId());
-            stringBuilder.append(",");
-        }
-        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf(","));
-        return stringBuilder.toString();
-    }
-
-    /**
-     * Метод преобразования строки в список ID историй просмотра
-     * @param value - строка
-     * @return - список
-     */
-    private static List<Integer> getHistoryListNum(String value) {
-        String[] strNum = value.split(",");
-        List<Integer> resultList = new ArrayList<>();
-        for (String num : strNum) {
-            resultList.add(Integer.parseInt(num));
-        }
-        return resultList;
-    }
-
-    /**
      * Метод установки истории из списка
      * @param listHistory - список истории ID
      */
-    private void getHistoryFromList(List<Integer> listHistory) {
+    public void getHistoryFromList(List<Integer> listHistory) {
         for (Integer id : listHistory) {
             for (Integer idTask : storageTask.keySet()) {
                 if (Objects.equals(idTask, id)) {
@@ -315,20 +182,45 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 }
             }
         }
-        try {
-            save();
-        } catch (ManagerSaveExeption e) {
-            e.getMessageError();
+        save();
+    }
+
+    /**
+     * Метод записи задач в файл
+     *
+     * @throws ManagerSaveExeption - собственное исключение
+     */
+    protected void save() {
+        try (FileWriter writer = new FileWriter(fileName)) {
+            writer.write("id,type,name,status,description,epic");
+            writer.write(allTasksToList());
+            if (countGet != 0) {
+                writer.write("\n" + "\n" + CSVTaskForm.historyToString(historyManager));
+            }
+        } catch (IOException e) {
+            try {
+                throw new ManagerSaveExeption("Ошибка при записи в файл");
+            } catch (ManagerSaveExeption ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
     /**
-     * Метод установки в подзадачу id эпик-задачи
-     * @param subTask - подзадача
-     * @param idEpic - id эпик задачи
+     * Метод для создания определенной задачи
      */
-    private void setIdEpicSubtask(SubTask subTask, String idEpic) {
-        subTask.setEpicId(Integer.parseInt(idEpic));
+    private void whatCreateTask() {
+        switch (task.getTypeOfTask()) {
+            case TASK:
+                createTasks(task);
+                break;
+            case EPIC:
+                createEpic((Epic) task);
+                break;
+            case SUBTASK:
+                createSubtacks((SubTask) task);
+                break;
+        }
     }
 
     /**

@@ -14,6 +14,7 @@ public class Epic extends Task{
     public Epic(String title, String description) {
         super(title, description);
         subtackIDs = new ArrayList<>();
+        setTypeOfTask(TypeOfTasks.EPIC);
     }
 
     /** Метод удаление из листа определенный номер подзадачи
@@ -34,9 +35,4 @@ public class Epic extends Task{
         return subtackIDs;
     }
 
-    @Override
-    public String toString() {
-        return String.valueOf(super.getId()) + "," + TypeOfTasks.EPIC + "," + super.getTitle() +
-                "," + super.getStatus() + "," + super.getDescription() + "," + " ";
-    }
 }

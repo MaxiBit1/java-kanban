@@ -1,4 +1,4 @@
-package Exeption;
+package exeption;
 
 /**
  * Класс собственного ислючения
@@ -12,10 +12,6 @@ public class ManagerSaveExeption extends Exception {
         this.message = message;
     }
 
-    /**
-     * Метод получения сообщения об ошибке
-     * @return - строка об ошибке
-     */
     public String getMessageError() {
         return message + ": " + getMessage();
     }

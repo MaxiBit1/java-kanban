@@ -13,10 +13,12 @@ public class Task {
     private String description;
     private StatusTasks status;
     private int id;
+    private TypeOfTasks typeOfTask;
 
     public Task (String title, String description) {
         this.title = title;
         this.description = description;
+        typeOfTask = TypeOfTasks.TASK;
     }
 
     public int getId() {
@@ -53,6 +55,14 @@ public class Task {
                 && status == task.status;
     }
 
+    public TypeOfTasks getTypeOfTask() {
+        return typeOfTask;
+    }
+
+    public void setTypeOfTask(TypeOfTasks typeOfTask) {
+        this.typeOfTask = typeOfTask;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(title, description, status, id);
@@ -60,7 +70,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.valueOf(id)+ "," + TypeOfTasks.TASK +"," + title + "," + status + "," + description + "," + " ";
+        return String.valueOf(id)+ "," + typeOfTask +"," + title + "," + status + "," + description + "," + " ";
     }
 
 }
