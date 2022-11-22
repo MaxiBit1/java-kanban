@@ -46,20 +46,20 @@ public class Main {
         taskManager.setEpicStatus(epic2);
         System.out.println(epic1);
         System.out.println(epic2);
-//        taskManager.getTask(1);
-//        taskManager.getTask(2);
-//        taskManager.getSubtask(5);
-//        taskManager.getSubtask(3);
-//        taskManager.getSubtask(4);
-//        System.out.println(taskManager.getHistory());
-//        taskManager.getSubtask(5);
-//        System.out.println(taskManager.getHistory());
-//        taskManager.getEpic(6);
-//        taskManager.getEpic(7);
-//        System.out.println(taskManager.getHistory());
-//        taskManager.getEpic(6);
-//        taskManager.deleteTaskById(2);
-//        taskManager.deleteSubtaskById(3);
-//        System.out.println(taskManager.getHistory());
+        taskManager.getTask(1);
+        taskManager.getTask(2);
+        taskManager.getSubtask(5);
+        taskManager.getSubtask(3);
+        taskManager.getSubtask(4);
+        System.out.println(taskManager.getHistory());
+        taskManager.getSubtask(5);
+        System.out.println(taskManager.getHistory());
+        taskManager.getEpic(6);
+        taskManager.getEpic(7);
+        System.out.println(taskManager.getHistory());
+        taskManager.getEpic(6);
+        taskManager.deleteTaskById(2);
+        taskManager.deleteSubtaskById(3);
+        System.out.println(taskManager.getHistory());
     }
 }

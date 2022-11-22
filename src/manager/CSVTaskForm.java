@@ -25,16 +25,13 @@ public class CSVTaskForm  {
         if (TypeOfTasks.valueOf(cutString[1]) == TypeOfTasks.TASK) {
             task = new Task(cutString[2], cutString[4]);
             setTaskAtribuit(task, cutString);
-//            fileBackedTaskManager.createTasks(task);
         } else if (TypeOfTasks.valueOf(cutString[1]).equals(TypeOfTasks.EPIC)) {
             task = new Epic(cutString[2], cutString[4]);
             setTaskAtribuit(task, cutString);
-//            fileBackedTaskManager.createEpic((Epic) task);
         } else {
             task = new SubTask(cutString[2], cutString[4]);
             setTaskAtribuit(task, cutString);
             setIdEpicSubtask((SubTask) task, cutString[5]);
-//            fileBackedTaskManager.createSubtacks((SubTask) task);
         }
         return task;
     }
