@@ -17,7 +17,7 @@ import java.util.Objects;
  */
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private String fileName;
+    private final String fileName;
     private Task task;
 
     /**
@@ -32,7 +32,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
      *
      * @param fileName - название файла
      */
-    public FileBackedTaskManager(String fileName) {
+    public FileBackedTaskManager(String fileName) throws ManagerSaveExeption {
         this.fileName = fileName;
         try {
             String str = Files.readString(Path.of(fileName));
@@ -48,7 +48,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new ManagerSaveExeption("Ошибка при чтении файла");
         }
     }
 
@@ -190,7 +190,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
      *
      * @throws ManagerSaveExeption - собственное исключение
      */
-    protected void save() {
+    protected void save() throws ManagerSaveExeption {
         try (FileWriter writer = new FileWriter(fileName)) {
             writer.write("id,type,name,status,description,epic");
             writer.write(allTasksToList());
@@ -198,11 +198,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 writer.write("\n" + "\n" + CSVTaskForm.historyToString(historyManager));
             }
         } catch (IOException e) {
-            try {
-                throw new ManagerSaveExeption("Ошибка при записи в файл");
-            } catch (ManagerSaveExeption ex) {
-                throw new RuntimeException(ex);
-            }
+            throw new ManagerSaveExeption("Ошибка при сохраненнии в файл");
         }
     }
 

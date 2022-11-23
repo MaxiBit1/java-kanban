@@ -5,14 +5,9 @@ package exeption;
  * @author Max Vasilyev
  * @version 1.0
  */
-public class ManagerSaveExeption extends Exception {
-    String message;
+public class ManagerSaveExeption extends RuntimeException {
+
     public ManagerSaveExeption(String message) {
         super(message);
-        this.message = message;
-    }
-
-    public String getMessageError() {
-        return message + ": " + getMessage();
     }
 }
