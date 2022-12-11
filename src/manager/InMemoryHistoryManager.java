@@ -2,14 +2,18 @@ package manager;
 
 import data.Task;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Класс реализующий логику истории просмотра задач
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
-public class InMemoryHistoryManager implements HistoryManager{
+public class InMemoryHistoryManager implements HistoryManager {
 
     /**
      * Переменная головы списка
@@ -26,7 +30,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     @Override
     public void add(Task task) {
-        if(nodeMap.containsKey(task.getId())) {
+        if (nodeMap.containsKey(task.getId())) {
             remove(task.getId());
         }
         Node<Task> zapice = linkLast(task);
@@ -45,23 +49,25 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     /**
      * Запись узла в конец списка CustomLinkedList
+     *
      * @param task - задача
      * @return - получение узла
      */
     private Node<Task> linkLast(Task task) {
-         final Node<Task> oldTail = tail;
-         final Node<Task> newNode = new Node<>(task, oldTail, null);
-         tail = newNode;
-         if (oldTail == null) {
-             head = newNode;
-         } else {
-             oldTail.next = newNode;
-         }
-         return newNode;
+        final Node<Task> oldTail = tail;
+        final Node<Task> newNode = new Node<>(task, oldTail, null);
+        tail = newNode;
+        if (oldTail == null) {
+            head = newNode;
+        } else {
+            oldTail.next = newNode;
+        }
+        return newNode;
     }
 
     /**
      * Получения упорядочного списка ArrayList для отчетности
+     *
      * @return - упорядочного списка
      */
     private List<Task> getTasks() {
@@ -76,15 +82,19 @@ public class InMemoryHistoryManager implements HistoryManager{
 
     /**
      * Метод удаления узла
+     *
      * @param node - узел
      */
     private void removeNode(Node<Task> node) {
-        if(node.prev == null) {
+        if (node.prev == null && node.next != null) {
             node.next.prev = null;
             head = node.next;
-        } else if(node.next == null) {
+        } else if (node.next == null && node.prev != null) {
             node.prev.next = null;
             tail = node.prev;
+        } else if (node.next == null && node.prev == null) {
+            head = null;
+            tail = null;
         } else {
             Node<Task> oldTail = node.prev;
             Node<Task> oldHead = node.next;
@@ -99,6 +109,7 @@ public class InMemoryHistoryManager implements HistoryManager{
 
 /**
  * Класс узла
+ *
  * @param <Task> - обобщенный тип данных
  */
 class Node<Task> {

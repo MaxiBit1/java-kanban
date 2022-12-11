@@ -1,9 +1,14 @@
 package manager;
 
+import data.Epic;
+import data.StatusTasks;
+import data.SubTask;
+import data.Task;
 import exeption.ManagerSaveExeption;
-import data.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -12,6 +17,7 @@ import java.util.Objects;
 
 /**
  * Класс записи задач и истории просмотра в файл
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
@@ -38,12 +44,15 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             String str = Files.readString(Path.of(fileName));
             if (!str.isBlank()) {
                 String[] linesArr = str.split("\n");
-                for (int i = 1; i < linesArr.length - 1; i++) {
+                for (int i = 1; i < linesArr.length; i++) {
                     if (linesArr[i].isBlank()) {
-                        getHistoryFromList(CSVTaskForm.getHistoryListNum(linesArr[i + 1]));
+                        if (!linesArr[i + 1].isEmpty()) {
+                            getHistoryFromList(CSVTaskForm.getHistoryListNum(linesArr[i + 1]));
+                            break;
+                        }
                     } else {
-                       task = CSVTaskForm.toTask(linesArr[i]);
-                       whatCreateTask();
+                        task = CSVTaskForm.toTask(linesArr[i]);
+                        whatCreateTask();
                     }
                 }
             }
@@ -162,6 +171,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     /**
      * Метод установки истории из списка
+     *
      * @param listHistory - список истории ID
      */
     public void getHistoryFromList(List<Integer> listHistory) {
@@ -192,7 +202,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
      */
     protected void save() throws ManagerSaveExeption {
         try (FileWriter writer = new FileWriter(fileName)) {
-            writer.write("id,type,name,status,description,epic");
+            writer.write("id,type,name,status,description,epic,startTime,duration");
             writer.write(allTasksToList());
             if (countGet != 0) {
                 writer.write("\n" + "\n" + CSVTaskForm.historyToString(historyManager));
@@ -221,6 +231,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     /**
      * Метод загрузки из файла
+     *
      * @param file - файл
      * @return - объкт класса FileBackedTaskManager
      */
@@ -230,22 +241,30 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     public static void main(String[] args) {
         TaskManager taskManager = new FileBackedTaskManager();
-        Task task1 = new Task("Накачать шину", "Нужно накачать шину на велике");
-        task1.setStatus(StatusTasks.NEW);
-        SubTask subTask = new SubTask("Собрать чемодан", "Нужно собрать чемодан");
-        subTask.setStatus(StatusTasks.IN_PROGRESS);
-        SubTask subTask2 = new SubTask("Купить билеты", "Необходимо купить билеты");
-        subTask2.setStatus(StatusTasks.DONE);
-        Epic epic1 = new Epic("Путешествие", "Нужно собраться в путешествие");
-        subTask.setEpicId(6);
-        subTask2.setEpicId(6);
-        taskManager.setEpicStatus(epic1);
+        Task task1 = new Task("T1", "Dec1");
+        task1.setStatus(StatusTasks.IN_PROGRESS);
+        task1.setStartTime("11.12.2022; 09:00");
+        task1.setDuration(15);
+        Task task2 = new Task("T2", "Dec2");
+        task2.setStatus(StatusTasks.NEW);
         taskManager.createTasks(task1);
-        taskManager.getTask(1);
-        taskManager.createSubtacks(subTask);
+        taskManager.createTasks(task2);
+        SubTask subTask1 = new SubTask("S1", "DecS1");
+        subTask1.setStatus(StatusTasks.NEW);
+        subTask1.setStartTime("11.12.2022; 09:40");
+        subTask1.setDuration(10);
+        taskManager.createSubtacks(subTask1);
+        SubTask subTask2 = new SubTask("S2", "DecS1");
+        subTask2.setStatus(StatusTasks.NEW);
+        subTask2.setStartTime("11.12.2022; 09:50");
+        subTask2.setDuration(40);
         taskManager.createSubtacks(subTask2);
-        taskManager.getSubtask(3);
+        Epic epic1 = new Epic("E1", "DescE1");
         taskManager.createEpic(epic1);
+        subTask1.setEpicId(5);
+        subTask2.setEpicId(5);
+        taskManager.setEpicStatus(epic1);
+        epic1.setStartTimeEpic(taskManager);
         File file = Paths.get("resources/save.csv").toFile();
         TaskManager taskManager1 = loadFromFile(file);
         System.out.println(taskManager1.getHistory());

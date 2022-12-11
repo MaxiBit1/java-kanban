@@ -5,21 +5,23 @@ import data.StatusTasks;
 import data.SubTask;
 import data.Task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.util.*;
 
 /**
  * Класс реализующий логику менеджера
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
 public class InMemoryTaskManager implements TaskManager {
+    Comparator<Task> comparable = Comparator.comparing(Task::getStartTime);
 
     protected HashMap<Integer, Task> storageTask = new HashMap<>();
     protected HashMap<Integer, Epic> storageEpic = new HashMap<>();
     protected HashMap<Integer, SubTask> storageSubtask = new HashMap<>();
+    private final Set<Task> priotitySet = new TreeSet<>(comparable);
     protected int indificator = 0;
     protected int countGet = 0;
 
@@ -44,6 +46,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createTasks(Task task) {
         task.setId(++indificator);
         storageTask.put(indificator, task);
+        priotitySet.add(task);
     }
 
     @Override
@@ -56,6 +59,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void createSubtacks(SubTask subTask) {
         subTask.setId(++indificator);
         storageSubtask.put(indificator, subTask);
+        priotitySet.add(subTask);
     }
 
     @Override
@@ -125,8 +129,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void setEpicStatus(Epic epic) {
-        for (SubTask subTask: storageSubtask.values()) {
-            if(epic.getId() == subTask.getEpicId()) {
+        for (SubTask subTask : storageSubtask.values()) {
+            if (epic.getId() == subTask.getEpicId()) {
                 epic.getSubtackIDs().add(subTask.getId());
             }
         }
@@ -156,7 +160,7 @@ public class InMemoryTaskManager implements TaskManager {
         storageEpic.put(epic.getId(), epic);
         System.out.println("Обновление произошло");
     }
-    
+
     @Override
     public void setUpdateSubtask(SubTask subTask) {
         storageSubtask.put(subTask.getId(), subTask);
@@ -175,14 +179,14 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getEpic(int id) {
+    public Epic getEpic(int id) {
         countGet++;
         historyManager.add(storageEpic.get(id));
         return storageEpic.get(id);
     }
 
     @Override
-    public Task getSubtask(int id) {
+    public SubTask getSubtask(int id) {
         countGet++;
         historyManager.add(storageSubtask.get(id));
         return storageSubtask.get(id);
@@ -193,8 +197,27 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    @Override
+    public Set<Task> getPrioritizedTask() {
+        Instant endTimePerez = null;
+        for (Task task : priotitySet) {
+            if (endTimePerez == null) {
+                endTimePerez = task.getEndTime().toInstant(ZoneOffset.UTC);
+            } else {
+                if (endTimePerez.isAfter(task.getEndTime().toInstant(ZoneOffset.UTC))) {
+                    priotitySet.remove(task);
+                } else {
+                    endTimePerez = task.getEndTime().toInstant(ZoneOffset.UTC);
+                    ;
+                }
+            }
+        }
+        return priotitySet;
+    }
+
     /**
      * Метод проверки статуса для метода получения статуса для задач-эпиков
+     *
      * @param task - задача
      * @return возвращает результат проверки
      */
@@ -204,6 +227,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Метод проверки статуса "NEW" во всех подзадачах в задачах-эпиков
+     *
      * @param listOfSubtask - список всех индификаторов подзадач в определенной задаче-эпике
      * @return возвращает результат проверки
      */
@@ -214,7 +238,7 @@ public class InMemoryTaskManager implements TaskManager {
                 countOfNewStatus++;
             }
         }
-        if (countOfNewStatus == listOfSubtask.size()) {
+        if (countOfNewStatus > 0) {
             return true;
         }
         return false;
@@ -222,6 +246,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * Метод проверки значения статуса во всех подзадачах в задах-эпиках
+     *
      * @param arrayBoolean - список всех проверок статусов подзадач в определенной задаче-эпике
      * @return возвращает результат проверки
      */
@@ -232,5 +257,12 @@ public class InMemoryTaskManager implements TaskManager {
             }
         }
         return true;
+    }
+
+    @Override
+    public List<SubTask> getSortPerStatrtTimeSubtask() {
+        List<SubTask> resultList = new ArrayList<>(storageSubtask.values());
+        resultList.sort(comparable);
+        return resultList;
     }
 }

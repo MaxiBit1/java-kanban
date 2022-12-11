@@ -7,59 +7,45 @@ import manager.TaskManager;
 
 /**
  * Главный класс планера
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
 
 public class Main {
 
-    /** Главный метод планера */
+    /**
+     * Главный метод планера
+     */
     public static void main(String[] args) {
 
         TaskManager taskManager = Managers.getDefault();
 
-        Task task1 = new Task("Накачать шину", "Нужно накачать шину на велике");
-        task1.setStatus(StatusTasks.NEW);
-        Task task2 = new Task("Купить книгу", "Нужно купить книгу Хеммингуэя");
-        task2.setStatus(StatusTasks.IN_PROGRESS);
-        SubTask subTask = new SubTask("Собрать чемодан", "Нужно собрать чемодан");
-        subTask.setStatus(StatusTasks.IN_PROGRESS);
-        SubTask subTask2 = new SubTask("Купить билеты", "Необходимо купить билеты");
-        subTask2.setStatus(StatusTasks.DONE);
-        SubTask subTask3 = new SubTask("Помыть пол", "Необходимо помыть пол");
-        subTask3.setStatus(StatusTasks.NEW);
-        Epic epic1 = new Epic("Путешествие", "Нужно собраться в путешествие");
-        subTask.setEpicId(6);
-        subTask2.setEpicId(6);
-        subTask3.setEpicId(6);
-        Epic epic2 = new Epic("Уборка в доме", "Необходимо убраться в доме");
-
-
+        Task task1 = new Task("T1", "Dec1");
+        task1.setStatus(StatusTasks.IN_PROGRESS);
+        task1.setStartTime("11.12.2022; 09:00");
+        task1.setDuration(15);
+        Task task2 = new Task("T2", "Dec2");
+        task2.setStatus(StatusTasks.NEW);
         taskManager.createTasks(task1);
         taskManager.createTasks(task2);
-        taskManager.createSubtacks(subTask);
+        SubTask subTask1 = new SubTask("S1", "DecS1");
+        subTask1.setStatus(StatusTasks.NEW);
+        subTask1.setStartTime("11.12.2022; 09:40");
+        subTask1.setDuration(10);
+        taskManager.createSubtacks(subTask1);
+        SubTask subTask2 = new SubTask("S2", "DecS1");
+        subTask2.setStatus(StatusTasks.NEW);
+        subTask2.setStartTime("11.12.2022; 09:50");
+        subTask2.setDuration(40);
         taskManager.createSubtacks(subTask2);
-        taskManager.createSubtacks(subTask3);
+        Epic epic1 = new Epic("E1", "DescE1");
         taskManager.createEpic(epic1);
+        subTask1.setEpicId(5);
+        subTask2.setEpicId(5);
         taskManager.setEpicStatus(epic1);
-        taskManager.createEpic(epic2);
-        taskManager.setEpicStatus(epic2);
-        System.out.println(epic1);
-        System.out.println(epic2);
-        taskManager.getTask(1);
-        taskManager.getTask(2);
-        taskManager.getSubtask(5);
-        taskManager.getSubtask(3);
-        taskManager.getSubtask(4);
-        System.out.println(taskManager.getHistory());
-        taskManager.getSubtask(5);
-        System.out.println(taskManager.getHistory());
-        taskManager.getEpic(6);
-        taskManager.getEpic(7);
-        System.out.println(taskManager.getHistory());
-        taskManager.getEpic(6);
-        taskManager.deleteTaskById(2);
-        taskManager.deleteSubtaskById(3);
-        System.out.println(taskManager.getHistory());
+        epic1.setStartTimeEpic(taskManager);
+        System.out.println(epic1.getEndTime(taskManager));
+        System.out.println(taskManager.getPrioritizedTask());
     }
 }

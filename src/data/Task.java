@@ -1,9 +1,12 @@
 package data;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
  * Класс простой задачи
+ *
  * @author Max Vasilyev
  * @version 1.0
  */
@@ -14,11 +17,16 @@ public class Task {
     private StatusTasks status;
     private int id;
     private TypeOfTasks typeOfTask;
+    private long duration;
+    private LocalDateTime startTime;
+    protected DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy; HH:mm");
 
-    public Task (String title, String description) {
+
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
         typeOfTask = TypeOfTasks.TASK;
+        startTime = LocalDateTime.MAX;
     }
 
     public int getId() {
@@ -45,6 +53,14 @@ public class Task {
         return status;
     }
 
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = LocalDateTime.parse(startTime, formatter);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,6 +79,18 @@ public class Task {
         this.typeOfTask = typeOfTask;
     }
 
+    public LocalDateTime getEndTime() {
+        return startTime.plusMinutes(duration);
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(title, description, status, id);
@@ -70,7 +98,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return String.valueOf(id)+ "," + typeOfTask +"," + title + "," + status + "," + description + "," + " ";
+        return String.valueOf(id) + "," + typeOfTask + "," + title + "," + status + "," + description + "," + " " + ","
+                + startTime.format(formatter) + "," + duration;
     }
 
 }

@@ -1,15 +1,13 @@
 package manager;
 
 import data.*;
-import exeption.ManagerSaveExeption;
 
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class CSVTaskForm  {
+public class CSVTaskForm {
     private static File file = Paths.get("resources/save.csv").toFile();
     private static FileBackedTaskManager fileBackedTaskManager = FileBackedTaskManager.loadFromFile(file);
 
@@ -45,6 +43,8 @@ public class CSVTaskForm  {
     private static void setTaskAtribuit(Task task, String[] cutString) {
         task.setId(Integer.parseInt(cutString[0]));
         task.setStatus(StatusTasks.valueOf(cutString[3]));
+        task.setStartTime(cutString[6]);
+        task.setDuration(Long.parseLong(cutString[7]));
     }
 
     /**
@@ -65,6 +65,7 @@ public class CSVTaskForm  {
 
     /**
      * Метод преобразования строки в список ID историй просмотра
+     *
      * @param value - строка
      * @return - список
      */
@@ -79,8 +80,9 @@ public class CSVTaskForm  {
 
     /**
      * Метод установки в подзадачу id эпик-задачи
+     *
      * @param subTask - подзадача
-     * @param idEpic - id эпик задачи
+     * @param idEpic  - id эпик задачи
      */
     private static void setIdEpicSubtask(SubTask subTask, String idEpic) {
         subTask.setEpicId(Integer.parseInt(idEpic));
