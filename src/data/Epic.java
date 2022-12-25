@@ -3,7 +3,9 @@ package data;
 import manager.TaskManager;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -24,7 +26,8 @@ public class Epic extends Task {
     }
 
     public void setStartTime() {
-        super.setStartTime(startTimeEpic.format(super.formatter));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy; HH:mm");
+        super.setStartTime(startTimeEpic.format(formatter));
     }
 
     /**
@@ -39,23 +42,23 @@ public class Epic extends Task {
     /**
      * Установка начального времени задачи-эпика
      *
-     * @param taskManager - менеджер
+     * @param sortedList - отсортированный лист подзадач по времени
      */
-    public void setStartTimeEpic(TaskManager taskManager) {
-        startTimeEpic = taskManager.getSortPerStatrtTimeSubtask().get(0).getStartTime();
+    public void setStartTimeEpic(List<SubTask> sortedList) {
+        startTimeEpic = sortedList.get(0).getStartTime();
         setStartTime();
     }
 
     /**
      * Получение коненчного времени задачи-эпик
      *
-     * @param taskManager - менеджер
+     * @param listSubtask - список подзадач
      * @return конечное время задачи-эпик
      */
-    public LocalDateTime getEndTime(TaskManager taskManager) {
+    public LocalDateTime getEndTime(List<SubTask> listSubtask) {
         long duration = 0;
         for (Integer subtackID : subtackIDs) {
-            for (Task subTask : taskManager.getStorageSubtask()) {
+            for (Task subTask : listSubtask) {
                 if (subtackID == subTask.getId()) {
                     duration += subTask.getDuration();
                 }

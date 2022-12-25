@@ -1,12 +1,10 @@
 package manager;
 
-import data.Epic;
-import data.StatusTasks;
-import data.SubTask;
-import data.Task;
+import data.*;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -25,7 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected int indificator = 0;
     protected int countGet = 0;
 
-    HistoryManager historyManager = Managers.HistoryManagergetDefaultHistory();
+    HistoryManager historyManager = Managers.historyManagergetDefaultHistory();
 
     @Override
     public List<Task> getStorageTask() {
@@ -33,12 +31,12 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public List<Task> getStorageEpic() {
+    public List<Epic> getStorageEpic() {
         return new ArrayList<>(storageEpic.values());
     }
 
     @Override
-    public List<Task> getStorageSubtask() {
+    public List<SubTask> getStorageSubtask() {
         return new ArrayList<>(storageSubtask.values());
     }
 
@@ -52,6 +50,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createEpic(Epic epic) {
         epic.setId(++indificator);
+        epic.setStartTimeEpic(getStorageSubtask());
+        setEpicStatus(epic);
         storageEpic.put(indificator, epic);
     }
 
@@ -76,31 +76,41 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllTasks() {
         System.out.println("Все задачи стерты");
-        for (Integer idTask : storageTask.keySet()) {
-            historyManager.remove(idTask);
+        if (!historyManager.getHistory().isEmpty()) {
+            for (Integer idTask : storageTask.keySet()) {
+                historyManager.remove(idTask);
+            }
         }
         storageTask.clear();
+        countGet = 0;
     }
 
     @Override
     public void deleteAllEpics() {
         System.out.println("Все задачи стерты");
-        for (Integer idTask : storageEpic.keySet()) {
-            historyManager.remove(idTask);
+        if (!historyManager.getHistory().isEmpty()) {
+            for (Integer idTask : storageEpic.keySet()) {
+                historyManager.remove(idTask);
+            }
         }
         storageEpic.clear();
+        countGet = 0;
     }
 
     @Override
     public void deleteAllSubtasks() {
         System.out.println("Все задачи стерты");
+
         for (Integer idTask : storageSubtask.keySet()) {
             historyManager.remove(idTask);
         }
+
         storageSubtask.clear();
+
         for (int id : storageEpic.keySet()) {
             storageEpic.get(id).deleteAllList();
         }
+        countGet = 0;
     }
 
     @Override
@@ -165,8 +175,10 @@ public class InMemoryTaskManager implements TaskManager {
     public void setUpdateSubtask(SubTask subTask) {
         storageSubtask.put(subTask.getId(), subTask);
         Epic epic = storageEpic.get(storageSubtask.get(subTask.getId()).getEpicId());
-        int ind = epic.getSubtackIDs().indexOf(subTask.getId());
-        storageEpic.get(subTask.getEpicId()).getSubtackIDs().set(ind, subTask.getId());
+        if(epic != null) {
+            int ind = epic.getSubtackIDs().indexOf(subTask.getId());
+            storageEpic.get(subTask.getEpicId()).getSubtackIDs().set(ind, subTask.getId());
+        }
         System.out.println("Обновление произошло");
     }
 
@@ -264,5 +276,23 @@ public class InMemoryTaskManager implements TaskManager {
         List<SubTask> resultList = new ArrayList<>(storageSubtask.values());
         resultList.sort(comparable);
         return resultList;
+    }
+
+    @Override
+    public List<SubTask> getEpicSubtask(int id) {
+        List<SubTask> resultSubtask = new ArrayList<>();
+        for (Integer subtackID : storageEpic.get(id).getSubtackIDs()) {
+            for (Integer idStorageSubtask : storageSubtask.keySet()) {
+                if (subtackID == idStorageSubtask) {
+                    resultSubtask.add(storageSubtask.get(idStorageSubtask));
+                }
+            }
+        }
+        return resultSubtask;
+    }
+
+    @Override
+    public int getIndificator() {
+        return indificator;
     }
 }

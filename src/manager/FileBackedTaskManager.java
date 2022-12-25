@@ -52,7 +52,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         }
                     } else {
                         task = CSVTaskForm.toTask(linesArr[i]);
-                        whatCreateTask();
+                        whatCreateTask(task);
                     }
                 }
             }
@@ -215,7 +215,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     /**
      * Метод для создания определенной задачи
      */
-    private void whatCreateTask() {
+    protected void whatCreateTask(Task task) {
         switch (task.getTypeOfTask()) {
             case TASK:
                 createTasks(task);
@@ -264,7 +264,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         subTask1.setEpicId(5);
         subTask2.setEpicId(5);
         taskManager.setEpicStatus(epic1);
-        epic1.setStartTimeEpic(taskManager);
+        epic1.setStartTimeEpic(taskManager.getSortPerStatrtTimeSubtask());
         File file = Paths.get("resources/save.csv").toFile();
         TaskManager taskManager1 = loadFromFile(file);
         System.out.println(taskManager1.getHistory());

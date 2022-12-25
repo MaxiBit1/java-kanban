@@ -30,7 +30,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     public void shouldSaveAndReturnNullTaskFromFile() {
         File file = Paths.get("resources/save.csv").toFile();
         TaskManager taskManager1 = FileBackedTaskManager.loadFromFile(file);
-        assertTrue(taskManager1.getStorageTask().isEmpty());
+        assertFalse(taskManager1.getStorageTask().isEmpty());
     }
 
     @Test
@@ -55,12 +55,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     @Override
     public void shouldDellAllTasks() {
         super.shouldDellAllTasks();
-    }
-
-    @Test
-    @Override
-    public void shouldDellAllTaskWithoutCreate() {
-        super.shouldDellAllTaskWithoutCreate();
     }
 
     @Test
@@ -143,7 +137,6 @@ class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
         taskManager.createTasks(task);
         taskManager.createSubtacks(subTask1);
         taskManager.createEpic(epic1);
-        taskManager.setEpicStatus(epic1);
         File file = Paths.get("resources/save.csv").toFile();
         TaskManager taskManager1 = FileBackedTaskManager.loadFromFile(file);
         NullPointerException exception = assertThrows(

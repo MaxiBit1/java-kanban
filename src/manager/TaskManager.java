@@ -26,14 +26,14 @@ public interface TaskManager {
      *
      * @return - список эпик-задач
      */
-    List<Task> getStorageEpic();
+    List<Epic> getStorageEpic();
 
     /**
      * Метод получение списка подзадач
      *
      * @return - список подзадач
      */
-    List<Task> getStorageSubtask();
+    List<SubTask> getStorageSubtask();
 
     /**
      * Метод для создание задачи и сохранение его хэш-таблице
@@ -172,4 +172,15 @@ public interface TaskManager {
      * @return - упорядочного множества
      */
     List<SubTask> getSortPerStatrtTimeSubtask();
+
+    /**
+     * Метод для получения множества подзадач в эпик-задаче
+     *
+     * @param id - индетификатор эпик-задачи
+     * @return - множество подзадач
+     */
+    List<SubTask> getEpicSubtask(int id);
+
+    public int getIndificator();
+
 }

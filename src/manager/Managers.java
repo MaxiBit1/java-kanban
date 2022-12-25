@@ -1,5 +1,7 @@
 package manager;
 
+import java.io.IOException;
+
 /**
  * Унитарный класс
  * @author Max Vasilyev
@@ -11,7 +13,15 @@ public class Managers  {
         return new InMemoryTaskManager();
     }
 
-    public static InMemoryHistoryManager HistoryManagergetDefaultHistory() {
+    public static InMemoryHistoryManager historyManagergetDefaultHistory() {
         return new InMemoryHistoryManager();
+    }
+
+    public static TaskManager fileBackedTaskManagersDefault() {
+        return new FileBackedTaskManager();
+    }
+
+    public static TaskManager httpTaskManagerDefault() throws IOException {
+        return new HttpTaskManager();
     }
 }

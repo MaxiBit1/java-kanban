@@ -42,12 +42,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Test
     @Override
-    public void shouldDellAllTaskWithoutCreate() {
-        super.shouldDellAllTaskWithoutCreate();
-    }
-
-    @Test
-    @Override
     public void shouldCreateTaskWithNull() {
         super.shouldCreateTaskWithNull();
     }

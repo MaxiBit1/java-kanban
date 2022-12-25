@@ -114,8 +114,8 @@ class EpicTest {
         subTask1.setDuration(10);
         subTask2.setStartTime("11.12.2022, 09:50");
         subTask2.setDuration(40);
-        epic.setStartTimeEpic(taskManager);
-        assertEquals("2022-12-11T10:30", epic.getEndTime(taskManager).toString());
+        epic.setStartTimeEpic(taskManager.getSortPerStatrtTimeSubtask());
+        assertEquals("2022-12-11T10:30", epic.getEndTime(taskManager.getStorageSubtask()).toString());
     }
 
 }

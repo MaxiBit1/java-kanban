@@ -64,13 +64,14 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldCreateEpic() {
+        taskManager.createSubtacks(subTask1);
         taskManager.createEpic(epic1);
         final int idTask = epic1.getId();
         Epic taskOff = taskManager.getEpic(idTask);
         assertNotNull(taskOff, "Ошибка в записи задачи");
         assertEquals(epic1, taskOff, "Задачи не совпадают");
 
-        final List<Task> exampleList = taskManager.getStorageEpic();
+        final List<Epic> exampleList = taskManager.getStorageEpic();
         assertNotNull(exampleList, "Нет записи в список задач");
         assertEquals(1, exampleList.size(), "Переполнен список");
         assertEquals(epic1, exampleList.get(0), "Задачи не совпадают");
@@ -87,7 +88,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(taskOff, "Ошибка в записи задачи");
         assertEquals(subTask1, taskOff, "Задачи не совпадают");
 
-        final List<Task> exampleList = taskManager.getStorageSubtask();
+        final List<SubTask> exampleList = taskManager.getStorageSubtask();
         assertNotNull(exampleList, "Нет записи в список задач");
         assertEquals(1, exampleList.size(), "Переполнен список");
         assertEquals(subTask1, exampleList.get(0), "Задачи не совпадают");
@@ -100,9 +101,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public void shouldDellAllTasks() {
         taskManager.createTasks(task);
         taskManager.createTasks(task2);
-        taskManager.createEpic(epic1);
         taskManager.createSubtacks(subTask1);
         taskManager.createSubtacks(subTask2);
+        taskManager.createEpic(epic1);
         taskManager.getTask(task.getId());
         taskManager.getTask(task2.getId());
         taskManager.getSubtask(subTask1.getId());
@@ -112,19 +113,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         taskManager.deleteAllEpics();
         assertTrue(taskManager.getStorageTask().isEmpty(), "Ошибка в удалении всех задач");
         assertTrue(taskManager.getStorageEpic().isEmpty(), "Ошибка в удалении всех задач");
-    }
-
-    /**
-     * Тест удаления всех задач бедз создания
-     */
-    @Test
-    public void shouldDellAllTaskWithoutCreate() {
-        taskManager.deleteAllTasks();
-        taskManager.deleteAllEpics();
-        taskManager.deleteAllSubtasks();
-        assertTrue(taskManager.getStorageTask().isEmpty(), "Ошибка в удалении всех задач");
-        assertTrue(taskManager.getStorageEpic().isEmpty(), "Ошибка в удалении всех задач");
-        assertTrue(taskManager.getStorageSubtask().isEmpty(), "Ошибка в удалении всех задач");
     }
 
     /**
@@ -183,12 +171,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldDeleteEpicPerIndificator() {
-        taskManager.createEpic(epic1);
         taskManager.createSubtacks(subTask1);
         taskManager.createSubtacks(subTask2);
         subTask1.setEpicId(epic1.getId());
         subTask2.setEpicId(epic1.getId());
-        taskManager.setEpicStatus(epic1);
+        taskManager.createEpic(epic1);
         taskManager.getEpic(epic1.getId());
         taskManager.getSubtask(subTask1.getId());
         taskManager.deleteEpicById(epic1.getId());
@@ -219,8 +206,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldDeleteTaskPerIndificatorWithNull() {
-        taskManager.deleteTaskById(task.getId());
-        assertTrue(taskManager.getStorageTask().isEmpty());
+        NullPointerException exTask = assertThrows(
+                NullPointerException.class,
+                () -> taskManager.deleteTaskById(task.getId())
+        );
+        assertNull(exTask.getMessage());
     }
 
     /**
@@ -228,8 +218,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldDeleteEpicPerIndificatorWithNull() {
-        taskManager.deleteEpicById(epic1.getId());
-        assertTrue(taskManager.getStorageEpic().isEmpty());
+        NullPointerException exTask = assertThrows(
+                NullPointerException.class,
+                () -> taskManager.deleteEpicById(epic1.getId())
+        );
+        assertNull(exTask.getMessage());
     }
 
     /**
@@ -237,8 +230,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldDeleteSubtaskTaskPerIndificatorWithNull() {
-        taskManager.deleteSubtaskById(subTask1.getId());
-        assertTrue(taskManager.getStorageSubtask().isEmpty());
+        NullPointerException exTask = assertThrows(
+                NullPointerException.class,
+                () -> taskManager.deleteSubtaskById(subTask1.getId())
+        );
+        assertNull(exTask.getMessage());
     }
 
     /**
@@ -256,12 +252,11 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldSetNewEpicStatus() {
-        taskManager.createEpic(epic1);
         taskManager.createSubtacks(subTask1);
         taskManager.createSubtacks(subTask2);
         subTask1.setEpicId(epic1.getId());
         subTask2.setEpicId(epic1.getId());
-        taskManager.setEpicStatus(epic1);
+        taskManager.createEpic(epic1);
         assertEquals(StatusTasks.NEW, epic1.getStatus(), "Ошибка в установки статуса эпик задачи");
     }
 
@@ -270,10 +265,9 @@ abstract class TaskManagerTest<T extends TaskManager> {
      */
     @Test
     public void shouldUpdateSubtask() {
-        taskManager.createEpic(epic1);
         taskManager.createSubtacks(subTask1);
         subTask1.setEpicId(epic1.getId());
-        taskManager.setEpicStatus(epic1);
+        taskManager.createEpic(epic1);
         subTask1.setStatus(StatusTasks.IN_PROGRESS);
         taskManager.setUpdateSubtask(subTask1);
         assertEquals(StatusTasks.IN_PROGRESS, subTask1.getStatus(), "Ошибка в обновлении подзадачи");

@@ -1,5 +1,7 @@
 package data;
 
+import java.time.format.DateTimeFormatter;
+
 /**
  * Класс подзадач
  *
@@ -34,7 +36,7 @@ public class SubTask extends Task {
     public String toString() {
         return String.valueOf(super.getId()) + "," + super.getTypeOfTask() + "," + super.getTitle() +
                 "," + super.getStatus() + "," + super.getDescription() + "," + epicId + ","
-                + super.getStartTime().format(formatter) + "," + super.getDuration();
+                + super.getStartTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy; HH:mm")) + "," + super.getDuration();
     }
 
 }
