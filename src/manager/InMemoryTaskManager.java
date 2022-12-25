@@ -50,8 +50,10 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void createEpic(Epic epic) {
         epic.setId(++indificator);
-        epic.setStartTimeEpic(getStorageSubtask());
         setEpicStatus(epic);
+        if(!epic.getSubtackIDs().isEmpty()) {
+            epic.setStartTimeEpic(getStorageSubtask());
+        }
         storageEpic.put(indificator, epic);
     }
 

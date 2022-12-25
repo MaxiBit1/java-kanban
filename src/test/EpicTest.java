@@ -29,6 +29,7 @@ class EpicTest {
         taskManager = new InMemoryTaskManager();
     }
 
+
     private void setSubtask1(StatusTasks statusTasks) {
         subTask1 = new SubTask("Sub1", "descSub 1");
         subTask1.setStatus(statusTasks);
@@ -46,7 +47,6 @@ class EpicTest {
     private void setEpic() {
         epic = new Epic("1", "description 1");
         taskManager.createEpic(epic);
-        taskManager.setEpicStatus(epic);
     }
 
     /**
@@ -109,12 +109,11 @@ class EpicTest {
     public void shouldSetEpicTime() {
         setSubtask1(StatusTasks.IN_PROGRESS);
         setSubtask2(StatusTasks.IN_PROGRESS);
-        setEpic();
-        subTask1.setStartTime("11.12.2022, 09:40");
+        subTask1.setStartTime("11.12.2022; 09:40");
         subTask1.setDuration(10);
-        subTask2.setStartTime("11.12.2022, 09:50");
+        subTask2.setStartTime("11.12.2022; 09:50");
         subTask2.setDuration(40);
-        epic.setStartTimeEpic(taskManager.getSortPerStatrtTimeSubtask());
+        setEpic();
         assertEquals("2022-12-11T10:30", epic.getEndTime(taskManager.getStorageSubtask()).toString());
     }
 
