@@ -1,4 +1,2 @@
 id,type,name,status,description,epic,startTime,duration
-1,TASK,T1,IN_PROGRESS,descriptionT1, ,31.12.+999999999; 23:59,0
-2,SUBTASK,S1,NEW,description1,0,31.12.+999999999; 23:59,0
-3,EPIC,E1,NEW,descriptionE1, ,31.12.+999999999; 23:59,0
+1,SUBTASK,S1,IN_PROGRESS,descrT1,2,31.12.+999999999; 23:59,0

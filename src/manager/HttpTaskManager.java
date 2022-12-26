@@ -22,9 +22,9 @@ import static manager.HTTPTaskForm.toTask;
  */
 public class HttpTaskManager extends FileBackedTaskManager {
 
-    KVTaskClient kvTaskClient;
-    String strJson;
-    int key = 1;
+    private KVTaskClient kvTaskClient;
+    private String strJson;
+    private int key = 1;
     private Gson gson = new Gson();
 
     public HttpTaskManager() throws IOException {
@@ -184,22 +184,20 @@ public class HttpTaskManager extends FileBackedTaskManager {
         return gson.toJson(listJSON);
     }
 
+    private static class LocalDateAdapter extends TypeAdapter<LocalDateTime> {
+        private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy; HH:mm");
 
-}
+        @Override
+        public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
+            jsonWriter.value(localDateTime.format(formatter));
+        }
 
-
-class LocalDateAdapter extends TypeAdapter<LocalDateTime> {
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy; HH:mm");
-
-    @Override
-    public void write(JsonWriter jsonWriter, LocalDateTime localDateTime) throws IOException {
-        jsonWriter.value(localDateTime.format(formatter));
-    }
-
-    @Override
-    public LocalDateTime read(JsonReader jsonReader) throws IOException {
-        return LocalDateTime.parse(jsonReader.nextString(), formatter);
+        @Override
+        public LocalDateTime read(JsonReader jsonReader) throws IOException {
+            return LocalDateTime.parse(jsonReader.nextString(), formatter);
+        }
     }
 }
+
 
 

@@ -105,32 +105,33 @@ public class InMemoryHistoryManager implements HistoryManager {
         node.prev = null;
         node.next = null;
     }
-}
-
-/**
- * Класс узла
- *
- * @param <Task> - обобщенный тип данных
- */
-class Node<Task> {
 
     /**
-     * пременная данных
+     * Класс узла
+     *
+     * @param <Task> - обобщенный тип данных
      */
-    public Task data;
-    /**
-     * переменная ссылки на предыдущие данные
-     */
-    public Node<Task> prev;
-    /**
-     * переменная ссылки на слудующие данные
-     */
-    public Node<Task> next;
+    public static class Node<Task> {
 
-    public Node(Task data, Node<Task> prev, Node<Task> next) {
-        this.data = data;
-        this.prev = prev;
-        this.next = next;
+        /**
+         * пременная данных
+         */
+        public Task data;
+        /**
+         * переменная ссылки на предыдущие данные
+         */
+        public Node<Task> prev;
+        /**
+         * переменная ссылки на слудующие данные
+         */
+        public Node<Task> next;
+
+        public Node(Task data, Node<Task> prev, Node<Task> next) {
+            this.data = data;
+            this.prev = prev;
+            this.next = next;
+        }
+
     }
-
 }
+

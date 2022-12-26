@@ -27,7 +27,7 @@ public class HttpTaskServer {
 
     private static final int PORT = 8080;
 
-    public static void main(String[] args) throws IOException {
+    public HttpTaskServer() throws IOException  {
         HttpServer httpServer = HttpServer.create();
         httpServer.bind(new InetSocketAddress(PORT), 0);
         httpServer.createContext("/tasks", new TaskHander());
@@ -46,7 +46,7 @@ public class HttpTaskServer {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             String method = exchange.getRequestMethod();
-            String path = exchange.getRequestURI().toString();
+            String path = exchange.getRequestURI().getPath();
             String[] arrPath = path.split("/");
             switch (method) {
                 case "GET": {
@@ -86,20 +86,20 @@ public class HttpTaskServer {
                     writeResponse(exchange, taskManager.getTask(idTask).toString(), 200);
                 }
             } else if (arrPath[2].equals("subtask")) {
-                if (arrPath.length == 3) {
+                if (arrPath.length == 3 && exchange.getRequestURI().getRawQuery().isBlank()) {
                     writeResponse(exchange, taskManager.getStorageSubtask().toString(), 200);
-                } else if (arrPath[3].equals("epic")) {
+                } else if (arrPath.length == 4) {
                     int idTask = Integer.parseInt(arrPath[4].substring(4));
                     writeResponse(exchange, taskManager.getEpicSubtask(idTask).toString(), 200);
                 } else {
-                    int idTask = Integer.parseInt(arrPath[3].substring(4));
+                    int idTask = Integer.parseInt(exchange.getRequestURI().getRawQuery().substring("id=".length()));
                     writeResponse(exchange, taskManager.getSubtask(idTask).toString(), 200);
                 }
             } else if (arrPath[2].equals("epic")) {
                 if (arrPath.length == 3) {
                     writeResponse(exchange, taskManager.getStorageEpic().toString(), 200);
                 } else {
-                    int idTask = Integer.parseInt(arrPath[3].substring(4));
+                    int idTask = Integer.parseInt(exchange.getRequestURI().getRawQuery().substring(4));
                     writeResponse(exchange, taskManager.getEpic(idTask).toString(), 200);
                 }
             } else {
@@ -123,9 +123,10 @@ public class HttpTaskServer {
             JsonElement jsonElement = JsonParser.parseString(jsonTask);
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             String type = jsonObject.get("typeOfTask").getAsString();
+            String idTask = jsonObject.get("id").getAsString();
             if (arrPath[2].equals("task")) {
-                Task task = gsonBuild.fromJson(jsonTask, Task.class);
-                if (task.getId() != 0) {
+                if (!idTask.equals("0")) {
+                    Task task = gsonBuild.fromJson(jsonTask, Task.class);
                     taskManager.setUpdateTask(task);
                     writeResponse(exchange, "Задача обновлена", 201);
                 } else {
@@ -133,8 +134,8 @@ public class HttpTaskServer {
                     writeResponse(exchange, "Задача создана", 201);
                 }
             } else if (arrPath[2].equals("subtask")) {
-                SubTask subTask = gson.fromJson(jsonTask, SubTask.class);
-                if (subTask.getId() != 0) {
+                if (!idTask.equals("0")) {
+                    SubTask subTask = gson.fromJson(jsonTask, SubTask.class);
                     taskManager.setUpdateSubtask(subTask);
                     writeResponse(exchange, "Подзадача обновлена", 201);
                 } else {
@@ -142,8 +143,8 @@ public class HttpTaskServer {
                     writeResponse(exchange, "Подзадача создана", 201);
                 }
             } else {
-                Epic epic = gson.fromJson(jsonTask, Epic.class);
-                if (epic.getId() != 0) {
+                if (!idTask.equals("0")) {
+                    Epic epic = gson.fromJson(jsonTask, Epic.class);
                     taskManager.setUpdateEpic(epic);
                     writeResponse(exchange, "Задача-эпик обновлена", 201);
                 } else {

@@ -4,7 +4,6 @@ import data.Epic;
 import data.StatusTasks;
 import data.SubTask;
 import data.Task;
-import manager.HttpTaskManager;
 import manager.Managers;
 import manager.TaskManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,6 +42,7 @@ public class HttpTaskManagerTest {
     @Test
     public void shouldSaveTaskAndReturn() throws IOException {
         taskManager.createTasks(task);
+        subTask1.setEpicId(3);
         taskManager.createSubtacks(subTask1);
         taskManager.createEpic(epic1);
         TaskManager taskManager1 = Managers.httpTaskManagerDefault();
